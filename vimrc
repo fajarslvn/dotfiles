@@ -30,12 +30,19 @@ set background=dark
 colorscheme PaperColor
 
 " ctrlp
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_user_command = 'find %s -type f'
+let g:ctrlp_root_markers = ['pom.xml', '.p4ignore']
+let g:ctrlp_switch_buffer = 'et'
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll)$',
+    \ 'link': 'some_bad_symbolic_links',
+    \ }
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-
-" Ultisnips
-" let g:UltiSnipsExpandTrigger="<c-tab>"
-" let g:UltiSnipsListSnippets="<c-s-tab>"
 
 " settings
 filetype on
@@ -103,8 +110,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
-"-- vim-go specific configuration
-"
 "" run :GoBuild or :GoTestCompile based on the go file
 function! s:build_go_files()
 	let l:file = expand('%')
@@ -130,8 +135,6 @@ let g:go_list_type = "quickfix"    " error lists are of type quickfix
 let g:go_fmt_command = "goimports" " automatically format and rewrite imports
 let g:go_auto_sameids = 1          " highlight matching identifiers
 
-"-- vim-go specific configuration (END)
-"
 ""-- coc.nvim specific configuration
 
 set hidden
