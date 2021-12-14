@@ -56,12 +56,18 @@ set updatetime=500
 set number relativenumber
 set showmatch
 set smarttab 
-set autoindent
+set tabstop=4
+set shiftwidth=4
 set nocompatible
 set wildmenu
 set autochdir
 set clipboard=unnamed
+set hidden
+set cmdheight=2
 set shortmess+=c
+set signcolumn=yes
+set autowrite
+set backspace=indent,eol,start
 
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -75,20 +81,22 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+
+" Start NERDTree and leave the cursor in it.
+autocmd VimEnter * NERDTree
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
 " coc.nvim default settings
 " -----------------------------------------
-
-" if hidden is not set, TextEdit might fail.
-set hidden
-" Better display for messages
-set cmdheight=2
-" Smaller updatetime for CursorHold & CursorHoldI
-set updatetime=300
-" don't give |ins-completion-menu| messages.
-set shortmess+=c
-" always show signcolumns
-set signcolumn=yes
-set autowrite
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -137,10 +145,6 @@ let g:go_auto_sameids = 1          " highlight matching identifiers
 
 ""-- coc.nvim specific configuration
 
-set hidden
-set cmdheight=2
-set updatetime=300
-set shortmess+=c
 if has("patch-8.1.1564")
 	set signcolumn=number
 else
