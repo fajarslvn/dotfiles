@@ -15,9 +15,10 @@ set wildmenu
 set autochdir
 set clipboard=unnamed
 set ruler
-set colorcolumn=90
+set colorcolumn=102
 set laststatus=2
 set backspace=indent,eol,start
+set endofline=off
 
 " plugins
 call plug#begin('~/.vim/plugged')
