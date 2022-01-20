@@ -15,12 +15,26 @@ set wildmenu
 set autochdir
 set clipboard=unnamed
 set ruler
-set colorcolumn=102
+set foldmethod=indent
+set foldnestmax=10
+set nofoldenable
+set foldlevel=2
+set foldlevelstart=99
 set laststatus=2
 set backspace=indent,eol,start
-set endofline=off
+set noeol
+set wrap
+set linebreak
+set nolist
+set expandtab
+set autoread
+set nobackup
+set nowritebackup
+set noswapfile
+set nu 
+set scrolloff=7
 
-" plugins
+" plugin
 call plug#begin('~/.vim/plugged')
 
 "> Go 
@@ -28,9 +42,11 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 "> Syntax
-Plug 'mxw/vim-jsx'
 Plug 'pangloss/vim-javascript'
 Plug 'hail2u/vim-css3-syntax'
+Plug 'leafgarland/typescript-vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'jparise/vim-graphql'
 Plug 'mattn/emmet-vim'
 
 "> General
@@ -43,6 +59,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mkitt/tabline.vim'
 Plug 'kqito/vim-easy-replace'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+Plug 'frazrepo/vim-rainbow'
 
 "> Theme 
 Plug 'dracula/vim', {'as': 'dracula'}
@@ -52,6 +69,9 @@ call plug#end()
 " colors
 colorscheme dracula
 set termguicolors
+
+" Rainbow brackets
+let g:rainbow_active = 1
 
 " ctrlp
 let g:ctrlp_map = '<c-p>'
@@ -74,6 +94,17 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 " remap
 inoremap jk <Esc>
+nnoremap tt :below terminal<CR>
+vmap <D-j> gj
+vmap <D-k> gk
+vmap <D-4> g$
+vmap <D-6> g^
+vmap <D-0> g0
+nmap <D-j> gj
+nmap <D-k> gk
+nmap <D-4> g$
+nmap <D-6> g^
+nmap <D-0> g0
 
 " NERDTree
 nnoremap <leader>n :NERDTreeFocus<CR>
@@ -81,25 +112,7 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
-" Open the existing NERDTree on each new tab.
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-
-" Start NERDTree and leave the cursor in it.
-autocmd VimEnter * NERDTree
-
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
-" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
-autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
-    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
-
 " coc.nvim default settings
-" -----------------------------------------
-
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <leader><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
@@ -142,8 +155,9 @@ autocmd FileType go setlocal foldmethod=expr foldexpr=getline(v:lnum)=~'^\s*'.&c
 let g:go_list_type = "quickfix"    " error lists are of type quickfix
 let g:go_fmt_command = "goimports" " automatically format and rewrite imports
 let g:go_auto_sameids = 1          " highlight matching identifiers
+let g:go_fmt_experimental = 1
 
-""-- coc.nvim specific configuration
+"-- coc.nvim specific configuration
 
 if has("patch-8.1.1564")
 	set signcolumn=yes
@@ -153,10 +167,6 @@ endif
 
 highlight clear SignColumn
 
-nmap <leader> gr <Plug>(coc-references)
-nmap <leader> gi <Plug>(coc-implementation)
-nmap <leader> rn <Plug>(coc-rename)
-
 nnoremap <leader> K :call <SID>show_documentation()<CR>
 
 " Emmet
@@ -164,64 +174,15 @@ let g:user_emmet_install_global = 0
 autocmd FileType gohtml,html,css EmmetInstall
 
 "Markdown Preview
-" set to 1, nvim will open the preview window after entering the markdown buffer
-" default: 0
 let g:mkdp_auto_start = 0
-
-" set to 1, the nvim will auto close current preview window when change
-" from markdown buffer to another buffer
-" default: 1
 let g:mkdp_auto_close = 1
-
-" set to 1, the vim will refresh markdown when save the buffer or
-" leave from insert mode, default 0 is auto refresh markdown as you edit or
-" move the cursor
-" default: 0
 let g:mkdp_refresh_slow = 0
-
-" set to 1, the MarkdownPreview command can be use for all files,
-" by default it can be use in markdown file
-" default: 0
 let g:mkdp_command_for_global = 0
-
-" set to 1, preview server available to others in your network
-" by default, the server listens on localhost (127.0.0.1)
-" default: 0
 let g:mkdp_open_to_the_world = 0
-
-" use custom IP to open preview page
-" useful when you work in remote vim and preview on local browser
-" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
-" default empty
 let g:mkdp_open_ip = ''
-
-" specify browser to open preview page
-" default: ''
 let g:mkdp_browser = ''
-
-" set to 1, echo preview page url in command line when open preview page
-" default is 0
 let g:mkdp_echo_preview_url = 0
-
-" a custom vim function name to open preview page
-" this function will receive url as param
-" default is empty
 let g:mkdp_browserfunc = ''
-
-" options for markdown render
-" mkit: markdown-it options for render
-" katex: katex options for math
-" uml: markdown-it-plantuml options
-" maid: mermaid options
-" disable_sync_scroll: if disable sync scroll, default 0
-" sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
-"   middle: mean the cursor position alway show at the middle of the preview page
-"   top: mean the vim top viewport alway show at the top of the preview page
-"   relative: mean the cursor position alway show at the relative positon of the preview page
-" hide_yaml_meta: if hide yaml metadata, default is 1
-" sequence_diagrams: js-sequence-diagrams options
-" content_editable: if enable content editable for preview page, default: v:false
-" disable_filename: if disable filename header for preview page, default: 0
 let g:mkdp_preview_options = {
     \ 'mkit': {},
     \ 'katex': {},
@@ -236,22 +197,9 @@ let g:mkdp_preview_options = {
     \ 'disable_filename': 0
     \ }
 
-" use a custom markdown style must be absolute path
-" like '/Users/username/markdown.css' or expand('~/markdown.css')
 let g:mkdp_markdown_css = ''
-
-" use a custom highlight style must absolute path
-" like '/Users/username/highlight.css' or expand('~/highlight.css')
 let g:mkdp_highlight_css = ''
-
-" use a custom port to start server or random for empty
 let g:mkdp_port = ''
-
-" preview page title
-" ${name} will be replace with the file name
 let g:mkdp_page_title = '「${name}」'
-
-" recognized filetypes
-" these filetypes will have MarkdownPreview... commands
 let g:mkdp_filetypes = ['markdown']
 
