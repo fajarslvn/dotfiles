@@ -2,6 +2,7 @@
 filetype on
 filetype plugin on
 filetype indent on
+let mapleader="\<Space>"
 
 syntax on 
 set encoding=utf-8
@@ -19,20 +20,12 @@ set foldmethod=indent
 set foldnestmax=10
 set nofoldenable
 set foldlevel=2
-set foldlevelstart=99
 set laststatus=2
 set backspace=indent,eol,start
 set noeol
 set wrap
 set linebreak
 set nolist
-set expandtab
-set autoread
-set nobackup
-set nowritebackup
-set noswapfile
-set nu 
-set scrolloff=7
 
 " plugin
 call plug#begin('~/.vim/plugged')
@@ -40,18 +33,23 @@ call plug#begin('~/.vim/plugged')
 "> Go 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-pairs', {'do': 'yarn install --frozen-lockfile'}
+Plug 'iamcco/coc-angular', {'do': 'yarn install --frozen-lockfile && yarn build'}
+Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
 
 "> Syntax
-Plug 'pangloss/vim-javascript'
-Plug 'hail2u/vim-css3-syntax'
-Plug 'leafgarland/typescript-vim'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'jparise/vim-graphql'
+Plug 'jparise/vim-graphql'
 Plug 'mattn/emmet-vim'
+Plug 'hail2u/vim-css3-syntax'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'ianks/vim-tsx', { 'for': 'typescript.tsx' }
+Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
 
 "> General
 Plug 'preservim/nerdtree'
-Plug 'vim-airline/vim-airline'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-commentary'
@@ -59,7 +57,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'mkitt/tabline.vim'
 Plug 'kqito/vim-easy-replace'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
-Plug 'frazrepo/vim-rainbow'
+Plug 'frazrepo/vim-rainbow'
 
 "> Theme 
 Plug 'dracula/vim', {'as': 'dracula'}
@@ -70,8 +68,7 @@ call plug#end()
 colorscheme dracula
 set termguicolors
 
-" Rainbow brackets
-let g:rainbow_active = 1
+let g:rainbow_active = 1
 
 " ctrlp
 let g:ctrlp_map = '<c-p>'
