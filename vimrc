@@ -6,26 +6,81 @@ let mapleader="\<Space>"
 
 syntax on 
 set encoding=utf-8
-set updatetime=500
-set number relativenumber
+set updatetime=300
+set number 
+set relativenumber
+
+" Indentation
 set tabstop=4
+set softtabstop=4
 set shiftwidth=4
 set autoindent
+set smarttab
+set expandtab
+
 set nocompatible
 set wildmenu
 set autochdir
 set clipboard=unnamed
 set ruler
-set foldmethod=indent
-set foldnestmax=10
-set nofoldenable
-set foldlevel=2
 set laststatus=2
 set backspace=indent,eol,start
-set noeol
 set wrap
 set linebreak
 set nolist
+set showcmd
+set lazyredraw
+set autowrite
+set timeoutlen=1000 ttimeoutlen=0
+set nostartofline
+set showmatch
+set noshowmode
+set signcolumn=yes
+set hidden
+set ttyfast
+
+" Start scrolling when we'are 8 lines aways from borders
+set scrolloff=8
+set sidescrolloff=15
+set sidescroll=5
+
+" Open splits on the right and below
+set splitbelow
+set splitright
+
+" ignore annoying swapfile messages
+set shortmess+=A
+" no splash screen
+set shortmess+=I
+" file-read message overwrites previous
+set shortmess+=O
+" truncate non-file messages in middle
+set shortmess+=T
+" don't echo "[w]"/"[written]" when writing
+set shortmess+=W
+" use abbreviations in messages eg. `[RO]` instead of `[readonly]`
+set shortmess+=a
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+" overwrite file-written messages
+set shortmess+=o
+" truncate file messages at start
+set shortmess+=t
+
+" always show signcolumns
+set signcolumn=yes
+
+" update vim after file update from outside
+set autoread
+
+" clipboard
+set clipboard=unnamed
+
+" no swap files
+set noswapfile
+set nobackup
+set nowritebackup
+set nowb
 
 " plugin
 call plug#begin('~/.vim/plugged')
@@ -47,6 +102,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'ianks/vim-tsx', { 'for': 'typescript.tsx' }
 Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 
 "> General
 Plug 'preservim/nerdtree'
