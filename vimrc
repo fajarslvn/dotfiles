@@ -3,6 +3,7 @@ filetype on
 filetype plugin on
 filetype indent on
 let mapleader="\<Space>"
+let g:Hexokinase_highlighters = ['virtual']
 
 syntax on 
 set encoding=utf-8
