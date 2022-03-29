@@ -1,22 +1,21 @@
 " settings
 filetype on
 filetype plugin on
-filetype indent on
-let mapleader="\<Space>"
-let g:Hexokinase_highlighters = ['virtual']
 
+set t_Co=256
 syntax on 
-set encoding=utf-8
-set updatetime=300
+set enc=utf-8
+set fenc=utf-8
+set termencoding=utf-8
+set updatetime=400
 set number 
 set relativenumber
+set foldenable
 
 " Indentation
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
 set autoindent
-set smarttab
+set tabstop=4
+set shiftwidth=4
 set expandtab
 
 set nocompatible
@@ -39,11 +38,6 @@ set noshowmode
 set signcolumn=yes
 set hidden
 set ttyfast
-
-" Start scrolling when we'are 8 lines aways from borders
-set scrolloff=8
-set sidescrolloff=15
-set sidescroll=5
 
 " Open splits on the right and below
 set splitbelow
@@ -89,21 +83,15 @@ call plug#begin('~/.vim/plugged')
 "> Go 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-prettier', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-pairs', {'do': 'yarn install --frozen-lockfile'}
-Plug 'iamcco/coc-angular', {'do': 'yarn install --frozen-lockfile && yarn build'}
-Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
 
-"> Syntax
+"> Javascript-Html-css
 Plug 'jparise/vim-graphql'
 Plug 'mattn/emmet-vim'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'ianks/vim-tsx', { 'for': 'typescript.tsx' }
-Plug 'HerringtonDarkholme/yats.vim', { 'for': 'typescript' }
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+Plug 'leafgarland/typescript-vim' 
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 "> General
 Plug 'preservim/nerdtree'
@@ -126,6 +114,8 @@ colorscheme dracula
 set termguicolors
 
 let g:rainbow_active = 1
+
+let mapleader="\<Space>"
 
 " ctrlp
 let g:ctrlp_map = '<c-p>'
@@ -173,10 +163,27 @@ inoremap <leader><expr> <TAB>
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
+let g:coc_global_extensions = [
+  \ 'coc-tsserver'
+  \ ]
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
+
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
 " Use <c-space> to trigger completion.
 inoremap <leader><expr> <c-space> coc#refresh()
@@ -226,6 +233,8 @@ nnoremap <leader> K :call <SID>show_documentation()<CR>
 " Emmet
 let g:user_emmet_install_global = 0
 autocmd FileType gohtml,html,css EmmetInstall
+autocmd BufEnter *.{js,jsx,ts,tsx} :syntax sync fromstart
+autocmd BufLeave *.{js,jsx,ts,tsx} :syntax sync clear
 
 "Markdown Preview
 let g:mkdp_auto_start = 0
