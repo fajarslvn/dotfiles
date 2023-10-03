@@ -109,20 +109,54 @@ parse_git_branch() {
         git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
-alias vim="mvim -v"
-alias l="ls -lah"
-# alias sqlite="sqlite3"
-
-# export PATH=${PATH}:/usr/local/mysql/bin/
-# export PATH=${PATH}:/usr/local/sqlite/bin/
-
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOPATH/bin
-export GOROOT=/usr/local/Cellar/go/1.17.3/libexec
-export GOPROXY=https://goproxy.cn,direct
-
-export PATH=$PATH:$GOBIN
-
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/Documents/Pentest/Misc/Programming
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+# Generated for pdtm
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+alias linkfinder='python3 /home/fsec/Documents/Pentest/tools/xnLinkFinder/xnLinkFinder.py'
+alias sqlmap='python3 /home/fsec/Documents/Pentest/tools/sqlmap-dev/sqlmap.py'
+alias waymore='python3 /home/fsec/Documents/Pentest/tools/waymore/waymore.py'
+alias urless='python3 /home/fsec/Documents/Pentest/tools/urless/urless.py'
+alias xray='/home/fsec/xray'
+alias xpoc='/home/fsec/xpoc'
+alias xsstrike='python3 /home/fsec/Documents/Pentest/tools/XSStrike/xsstrike.py'
+alias feroxbuster='/home/fsec/Documents/Pentest/tools/feroxbuster'
+
+
+# Generated for pdtm. Do not edit.
+export PATH=$PATH:/home/fsec/.pdtm/go/bin
+
+alias -g adb_set_proxy="adb shell settings put global http_proxy $(ip -o -4 addr show vboxnet0|awk '{print $4}'|sed 's/\/.*//g'):8080"
+
+alias -g adb_unset_proxy="adb shell settings put global http_proxy :0"
+
+#--- MEG ---
+search (){
+ grep $1 out/index | cut -d " " -f 1 | sort -u | xargs -n 1 -I{} grep -H -i "$2" {} | cut -d ":" -f 1 | sort -u
+}
+
+ipinfo(){
+curl http://ipinfo.io/$1
+}
+
+certspotter(){ 
+curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1
+}
+
+crtsh(){
+curl -s https://crt.sh/?Identity=%.$1 | grep ">*.$1" | sed 's/<[/]*[TB][DR]>/\n/g' | grep -vE "<|^[\*]*[\.]*$1" | sort -u | awk 'NF'
+}
+
+certnmap(){
+curl https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1  | nmap -T5 -Pn -sS -i - -$
+}
+
+webarchive(){
+curl http://web.archive.org/cdx/search/cdx\?url\=\*.$1\&fl\=original\&collapse\=urlkey\&filter\=statuscode:200
+}
