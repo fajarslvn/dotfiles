@@ -1,1 +1,1 @@
-## All my  dot files configutration
+## All my  dot files configuration
