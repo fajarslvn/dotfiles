@@ -2,13 +2,13 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/fajarsylvana/.oh-my-zsh"
+export ZSH="/home/fsec/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="pixegami-agnoster"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -109,30 +109,44 @@ parse_git_branch() {
         git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
 export GOROOT=/usr/local/go
-export GOPATH=$HOME/Documents/Pentest/Misc/Programming
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
 
-# Generated for pdtm
-export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
-
-alias linkfinder='python3 /home/fsec/Documents/Pentest/tools/xnLinkFinder/xnLinkFinder.py'
 alias sqlmap='python3 /home/fsec/Documents/Pentest/tools/sqlmap-dev/sqlmap.py'
-alias waymore='python3 /home/fsec/Documents/Pentest/tools/waymore/waymore.py'
-alias urless='python3 /home/fsec/Documents/Pentest/tools/urless/urless.py'
 alias xray='/home/fsec/xray'
 alias xpoc='/home/fsec/xpoc'
 alias xsstrike='python3 /home/fsec/Documents/Pentest/tools/XSStrike/xsstrike.py'
-alias feroxbuster='/home/fsec/Documents/Pentest/tools/feroxbuster'
+alias jadx='/usr/share/jadx/bin/jadx-gui'
+alias mobsf='cd /home/fsec/Documents/Pentest/androids/Mobile-Security-Framework-MobSF/ && ./run.sh 127.0.0.1:8000'
+alias recollapse='/home/fsec/Documents/Pentest/tools/recollapse/recollapse'
+alias rustscan='docker run -it --rm --name rustscan rustscan/rustscan:2.1.1'
+alias secretfinder='python3 /home/fsec/Documents/Pentest/tools/secretfinder/SecretFinder.py'
+alias sqlmap='python3 /home/fsec/Documents/Pentest/tools/sqlmap-dev/sqlmap.py'
+alias dirsearch='python3 /home/fsec/Documents/Pentest/tools/dirsearch/dirsearch.py'
+alias caido='/home/fsec/Documents/Pentest/tools/caido-cli'
+alias trufflehog='/home/fsec/Documents/Pentest/tools/trufflehog'
+alias xpoc='/home/fsec/xpoc'
+alias xray='/home/fsec/xray'
+alias xsstrike='python3 /home/fsec/Documents/Pentest/tools/XSStrike/xsstrike.py'
+alias githubdorks='/home/fsec/Documents/Pentest/tools/github_dorks.sh'
+
+alias vim=nvim
+alias pn=pnpm
+alias pbcopy='xsel --input --clipboard'
+alias pbpaste='xsel --output --clipboard'
+
+alias bbh='cd /home/fsec/Dropbox/Hacking/BBH/'
+alias hacking='cd /home/fsec/Dropbox/Hacking/'
+alias office='cd /home/fsec/Documents/Office/'
+alias pentest='cd /home/fsec/Documents/Pentest/'
+alias androids='cd /home/fsec/Documents/Pentest/androids'
+alias pertamina='cd /home/fsec/Documents/Office/Pertamina/'
+alias scripts='cd /home/fsec/Documents/Pentest/scripts/'
+alias tools='cd /home/fsec/Documents/Pentest/tools/'
 
 
-# Generated for pdtm. Do not edit.
-export PATH=$PATH:/home/fsec/.pdtm/go/bin
-
-alias -g adb_set_proxy="adb shell settings put global http_proxy $(ip -o -4 addr show vboxnet0|awk '{print $4}'|sed 's/\/.*//g'):8080"
+alias -g adb_set_proxy="adb shell settings put global http_proxy $(ip -o -4 addr show wlp0s20f3|awk '{print $4}'|sed 's/\/.*//g'):8080"
 
 alias -g adb_unset_proxy="adb shell settings put global http_proxy :0"
 
@@ -145,18 +159,6 @@ ipinfo(){
 curl http://ipinfo.io/$1
 }
 
-certspotter(){ 
-curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1
-}
-
 crtsh(){
-curl -s https://crt.sh/?Identity=%.$1 | grep ">*.$1" | sed 's/<[/]*[TB][DR]>/\n/g' | grep -vE "<|^[\*]*[\.]*$1" | sort -u | awk 'NF'
-}
-
-certnmap(){
-curl https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1  | nmap -T5 -Pn -sS -i - -$
-}
-
-webarchive(){
-curl http://web.archive.org/cdx/search/cdx\?url\=\*.$1\&fl\=original\&collapse\=urlkey\&filter\=statuscode:200
+curl -s https://crt.sh/\?q\=%.$1\&output\=json | jq -r '.[].common_name' | grep -Po '(\w+\.\w+\.\w+)$' |sort -u
 }
